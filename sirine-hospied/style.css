@@ -1,0 +1,1200 @@
+/* ---------- 1. VARIABLES: change a colour here, it changes everywhere ---------- */
+:root {
+  --cream: #fff0ad;
+  --pink: #C91D59;
+  --font-title: "Archivo Black", Impact, sans-serif;
+  --font-body: "Fredoka", system-ui, sans-serif;
+  --font-slab: 'Alfa Slab One', Georgia, serif;
+}
+
+@font-face {
+  font-family: 'Punk Kid';
+  src: url('fonts/punkkid.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Stretch Pro';
+  src: url('fonts/StretchPro.otf') format('opentype');
+}
+
+/* ---------- 2. RESET: remove the browser's default spacing ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+
+/* ---------- 3. HERO ---------- */
+.hero {
+  position: relative; /* children can be positioned relative to the hero */
+  height: 100vh;      /* vh = 1% of the screen height, so 100vh = full screen */
+  min-height: 560px;
+  overflow: hidden;   /* hide anything that sticks out */
+}
+
+/* A stage fills the hero completely and defines two colours: --bg and --ink.
+   The inverted copy simply swaps them, which is the whole trick. */
+.hero-stage {
+  --bg: var(--cream);
+  --ink: var(--pink);
+  position: absolute;
+  inset: 0; /* shortcut for top/right/bottom/left: 0 */
+}
+
+/* The light: a copy of the stage with swapped colours, only visible inside a circle.
+   JS updates --x, --y and --r as you move the mouse. */
+.hero-stage.hero-inverted {
+  --bg: var(--pink);
+  --ink: var(--cream);
+  --x: 50%;
+  --y: 50%;
+  --r: 0px;
+  clip-path: circle(var(--r) at var(--x) var(--y)); /* show only a circle */
+  pointer-events: none; /* clicks go through to the real page underneath */
+}
+
+/* Layers are stacked on top of each other */
+.hero-layer {
+  position: absolute;
+  inset: 0;
+  padding: 22px 3vw;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* The diagonal: same content, colours swapped, cut into a triangle-ish shape.
+   polygon() lists the corners: top-left of shape, top-right, bottom-right, bottom-left.
+   Try changing the 90% to move the diagonal. */
+.hero-layer.hero-diagonal {
+  background: var(--ink);
+  color: var(--bg);
+  clip-path: polygon(90% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ---------- 4. NAVBAR ---------- */
+.navbar {
+  display: flex;        /* puts children in a row */
+  align-items: center;  /* vertically centred */
+  font-family: var(--font-title);
+  font-size: clamp(15px, 1.7vw, 22px); /* clamp(min, ideal, max): scales with screen size */
+  text-transform: uppercase;
+}
+.logo { font-size: clamp(28px, 3.4vw, 44px); }
+.nav-links {
+  display: flex;
+  gap: clamp(24px, 5vw, 80px);
+  margin: 0 auto; /* auto margins push the links to the middle */
+  padding-right: 6vw;
+}
+
+/* ---------- 5. HERO TEXT ---------- */
+.hero-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+}
+.hero-name {
+  font-size: clamp(18px, 2.4vw, 32px);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+h1 {
+  position: relative;
+  font-family: var(--font-title);
+  font-size: clamp(34px, 10.2vw, 150px);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap; /* never wrap "WEB DESIGN" onto two lines */
+}
+.hero-arrow {
+  position: absolute;
+  left: 100%;
+  top: 55%;
+  width: 0.3em;
+  transform: translateX(-45%);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2.4vw, 32px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.55em; /* the wide spacing between letters */
+  margin: auto;
+  text-align: center;
+}
+
+.hero-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1.4rem;
+}
+.hero-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+}
+.hero-dots i:nth-child(3) { opacity: 1; } /* the third dot is the "active" one */
+
+.hero-lead {
+  position: absolute;
+  right: 3vw;
+  bottom: 9%;
+  width: min(46vw, 480px);
+  font-size: clamp(14px, 1.55vw, 20px);
+  line-height: 1.35;
+}
+
+/* ---------- 6. ABOUT SECTION ---------- */
+.about {
+  --illus-w: 35vw;   /* defined once, reused in 3 places below */
+  --illus-left: 7vw;
+}
+
+/* ----- top half ----- */
+.about-top {
+  position: relative;  /* reference point for the illustration + button */
+  display: grid;
+  grid-template-columns: 1fr min(25vw, 270px); /* text | toolkit */
+  gap: 5vw;
+ padding: 6vw 1vw calc(var(--illus-w) * 0.36 + 3vw);
+  background: var(--cream);
+  color: var(--pink);
+}
+
+.about-hello, .about-name {
+  font-family: var(--font-slab);
+  font-size: clamp(48px, 8vw, 120px);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+.about-hello, .about-outlined { /* cream fill + pink outline + hard shadow = "extruded" look */
+  color: var(--cream);
+  -webkit-text-stroke: 2px var(--pink);
+  text-shadow: 7px 7px 0 var(--pink);
+}
+.about-name { letter-spacing: .06em; }
+.about-name::after { /* the underline */
+  content: "";
+  display: block;
+  width: 62%;
+  height: 3px;
+  margin: .1em 0 0 auto; /* auto left margin pushes it right */
+  background: var(--pink);
+}
+
+.about-intro { margin-left: 5vw; }
+.about-intro p {
+    margin-top: 2.5rem;
+    font-size: clamp(20px, 1.8vw, 25px);
+    line-height: 1.45;
+    font-weight: 600;
+    max-width: 80%;
+}
+
+.about-toolkit h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(16px, 2vw, 26px);
+  font-weight: 600;
+  letter-spacing: .5em;
+  text-align: right;
+  text-transform: uppercase;
+}
+.about-toolkit ul { display: grid; gap: 1.2vw; }
+.about-toolkit li {
+  display: flex;
+  align-items: center;
+  padding: .45rem .6rem;
+  background: var(--pink);
+  color: var(--cream);
+  font-size: clamp(16px, 2.1vw, 27px);
+  font-weight: 600;
+  transition: .2s;
+}
+.about-toolkit li:hover { transform: translate(-10px); }
+
+.about-icon {
+  display: grid; place-items: center;
+  width: 1.7em; height: 1.7em;
+  background: var(--cream); color: var(--pink);
+  border-radius: .25em;
+  font: .75em var(--font-title);
+}
+.about-label { margin-left: auto; } /* pushes the label to the right edge */
+
+/* ----- THE OVERLAP ----- */
+.about-illustration {
+  position: absolute;
+  left: var(--illus-left);
+  bottom: 0;
+  transform: translateY(70%);
+  z-index: 2;
+  width: var(--illus-w);
+  aspect-ratio: 5 / 6;
+  overflow: hidden;
+  background-color: var(--cream);
+  border: 2px solid var(--pink);
+  filter: drop-shadow(10px 10px 0px var(--pink));
+}
+.about-illustration img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom left;
+  transform: scale(1.3) translateX(-10%) translateY(10%); /* zoom amount — raise or lower this */
+  transform-origin: bottom left; /* keeps the bottom-left corner fixed as it scales up */
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 1rem;
+  padding: .8em 1.6em;
+  border: 3px solid var(--pink);
+  border-radius: 999px;
+  box-shadow: 0 5px 0 var(--pink);
+  background: var(--cream);
+  color: var(--pink);
+  font: clamp(13px, 1.5vw, 19px) var(--font-title);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  transition: transform .2s, box-shadow .2s;
+}
+.btn:hover { transform: translateY(4px); box-shadow: 0 1px 0 var(--pink); }
+
+/* ----- .view-btn: only where THIS specific button sits ----- */
+.view-btn {
+  position: absolute;
+  left: calc(var(--illus-left) + var(--illus-w) + 5vw);
+  bottom: 6vw;
+}
+
+/* ----- bottom half ----- */
+.about-bottom {
+  min-height: 34vw;
+  padding: 2rem 3vw 4vw calc(var(--illus-left) + var(--illus-w) + 1.5vw); /* keeps content right of the illustration */
+  background: var(--pink);
+  color: var(--pink);
+}
+.about-search {
+  display: flex; align-items: center; gap: 1rem;
+  width: 90%;
+  margin: auto;
+  padding: .45em 1.2em;
+  background: var(--cream);
+  border-radius: 999px;
+  font-size: clamp(15px, 1.8vw, 24px);
+  font-weight: 600;
+}
+.about-search svg { width: 1.3em; fill: none; stroke: currentColor; stroke-width: 3; }
+
+/* ----- about me (languages + hobbies): everything is positioned INSIDE the blob, in % ----- */
+.about-me {
+  position: relative;
+  width: 47vw;
+  aspect-ratio: 13 / 9;        /* MUST match your SVG's viewBox ratio */
+  margin: 1.5rem 0 0 auto;
+  container-type: inline-size; /* lets text be sized in "cqw" = 1% of THIS box's width */
+}
+.about-me > * { position: absolute; }
+.about-me-bg { inset: 0; background: url(img/BlobShapes.svg) no-repeat; background-size: contain; }
+
+.about-me-title { top: 1%; right: 0%; font: 6.5cqw var(--font-title); letter-spacing: .25em; text-transform: uppercase; }
+
+.about-tag {
+  padding: .3em 0; text-align: center;
+  border: .6cqw solid; border-radius: 999px;
+  font: 600 3.4cqw var(--font-body);
+}
+.lang-tag  { left: 2%;  top: 22%; width: 39%; color: var(--pink); }
+.hobby-tag { left: 64%; top: 16%; width: 32%; color: var(--cream); }
+
+.lang-list { left: 1%; top: 40%; width: 30%; }
+.lang-list li { display: flex; align-items: center; gap: 1.5cqw; margin-bottom: 1.2cqw; }
+.lang-num  { font: 6.5cqw var(--font-slab); }
+.lang-pill { padding: .2em 1em; border: .5cqw solid var(--pink); border-radius: 999px; box-shadow: .5cqw .5cqw 0 var(--pink); font: 600 2.8cqw var(--font-body); }
+
+.hobby-grid { left: 33%; top: 29%; width: 53%; display: grid; grid-template-columns: 1fr 1fr; gap: 2cqw; }
+.hobby-card  { padding: 1.2cqw; background: var(--cream); border-radius: 1.5cqw; font: 600 2.3cqw/1.5 var(--font-body); }
+.hobby-card h3 { margin-bottom: .8cqw; padding: .2em .6em; background: var(--pink); color: var(--cream); border-radius: .8cqw; font-size: 1.7cqw; letter-spacing: .1em; }
+.hobby-card ol { padding-left: 2.2cqw; }
+
+/* ---------- 7. PROJECTS SECTION ---------- */
+.projects { padding: 90px 3vw 110px; background: var(--cream); }
+.projects-title {
+  font-family: var(--font-slab);
+  font-size: clamp(44px, 10vw, 150px);
+  line-height: 1;
+  letter-spacing: .22em;
+  margin: 0 0 50px;
+  text-align: center;
+  color: var(--pink);
+}
+
+.proj-tabs { display: flex; padding-left: 1vw; position: relative; z-index: 2; margin-bottom: -3px; }
+.proj-tab {
+  --notch: polygon(0 100%, 8% 0, 92% 0, 100% 100%);
+  font: 600 clamp(15px, 2.5vw, 32px) var(--font-body);
+  border: 0; background: var(--pink); color: var(--pink);
+  clip-path: var(--notch);
+  padding: 0; margin-right: -1.2vw; cursor: pointer;
+}
+.proj-tab span {
+  display: block; position: relative;
+  margin: 3px 3px 0;
+  padding: 14px clamp(24px, 4vw, 58px) 12px;
+  background: var(--cream);
+  clip-path: var(--notch);
+  transition: background .2s, color .2s;
+}
+.proj-tab[aria-selected="true"] { z-index: 3; }
+.proj-tab[aria-selected="true"] span { background: var(--pink); color: var(--cream); }
+
+.proj-panel {
+  display: none;
+  position: relative;
+  padding: clamp(20px, 3vw, 44px);
+  background: var(--pink); color: var(--cream);
+}
+.proj-panel.proj-on { display: block; }
+
+.proj-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 60px 1fr 300px 5vw;
+  gap: 24px;
+  align-items: center;
+  border-top: 2px solid var(--cream);
+  padding: 16px 12px;
+  transition: background .25s, color .25s, padding .25s;
+}
+.proj-row:last-child { border-bottom: 2px solid var(--cream); }
+.proj-n { font: 600 16px monospace; }
+.proj-title {
+  font-family: var(--font-slab);
+  font-size: clamp(28px, 5.5vw, 70px);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+}
+.proj-type {
+  font: 600 14px var(--font-body);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.proj-row:hover, .proj-row:focus-within {
+  background: var(--cream); color: var(--pink);
+  padding-left: 26px;
+  outline: none;
+  z-index: 4;
+}
+
+/* hover preview card */
+.pv {
+  position: absolute;
+  right: 10%; top: 50%;
+  width: min(30vw, 380px);
+  aspect-ratio: 4 / 3;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--cream); color: var(--pink);
+  border: 2.5px solid var(--cream);
+  box-shadow: 16px 16px 0 var(--cream);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-38%) rotate(0);
+  transition: opacity .25s, transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.proj-row:hover .pv, .proj-row:focus-within .pv {
+  opacity: 1;
+  transform: translateY(-52%) rotate(-3deg);
+  pointer-events: auto;
+}
+.pv i {
+  display: block;
+  background: var(--pink); color: var(--cream);
+  font: 600 11px monospace;
+  padding: 4px 8px;
+}
+.pv div { flex: 1; background-size: cover; background-position: top; } /* image comes from the inline style */
+
+.proj-more {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  font-weight: 700;
+  transition: transform .2s;
+}
+.proj-more:hover { transform: translate(15%); }
+
+/* ---------- 8. CONTACT SECTION ---------- */
+.contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.contact-pink {
+  display: flex;
+  align-items: center;
+  padding: 6vw 5vw;
+  background: var(--pink);
+}
+.contact-quote {
+  font-family: var(--font-slab);
+  font-size: clamp(40px, 6vw, 90px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--pink);
+  -webkit-text-stroke: 1px var(--cream);
+  text-shadow: 7px 7px 0 var(--cream);
+}
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.8rem;
+  padding: 6vw 5vw;
+  background: var(--cream);
+  color: var(--pink);
+  border-block: 2px solid var(--pink);
+}
+.contact-note {
+  font-size: clamp(15px, 1.6vw, 20px);
+  line-height: 1.5;
+  max-width: 44ch;
+}
+.contact-email {
+  font-family: var(--font-title);
+  font-size: clamp(26px, 3.2vw, 42px);
+  word-break: break-word; /* long addresses won't overflow on small screens */
+}
+.contact-divider {
+  border: 0;
+  border-top: 2px solid var(--pink);
+}
+
+/* ---------- 9. FOOTER ---------- */
+/* Shared as-is between the homepage and every project page — don't rename these. */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* so it stacks nicely on narrow screens instead of squeezing */
+  gap: .6rem 1.5rem;
+  padding: 1.4rem 5vw;
+  background: var(--cream);
+  color: var(--pink);
+  font-size: clamp(12px, 1.3vw, 15px);
+  font-weight: 600;
+  border-top: 2px solid var(--pink);
+}
+.footer-name { font-size: 1.1rem; }
+.footer-links a { opacity: .85; transition: opacity .15s; }
+.footer-links a:hover { opacity: 1; text-decoration: underline; }
+
+/* ---------- 10. PROJECT PAGE TEMPLATE ---------- */
+/* Everything below is SHARED by every project page. Never edit these rules
+   per-project — only add a new "PROJECT COLOR DATA" block (section 11). */
+
+/* ----- pink top bar ----- */
+.pp-topbar { background: var(--pink); padding: 0 5vw; }
+.pp-topnav {
+  position: relative; /* anchors the mobile dropdown menu (section 12) */
+  display: flex; align-items: center; gap: 40px;
+  padding: 18px 0;
+  color: var(--cream);
+  font-family: var(--font-title);
+}
+.pp-topnav .logo { font-size: clamp(22px, 2.6vw, 30px); }
+.pp-topnav .nav-links {
+  display: flex; gap: clamp(20px, 4vw, 48px);
+  margin-left: auto;
+  font-size: clamp(13px, 1.3vw, 16px);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* hamburger toggle: hidden on desktop, shown + wired up on mobile (see section 12) */
+.pp-menu-toggle {
+  display: none;
+  position: relative;
+  width: 26px;
+  height: 18px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.pp-menu-toggle span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--cream);
+  transition: transform .2s, opacity .2s;
+}
+.pp-menu-toggle span:nth-child(1) { top: 0; }
+.pp-menu-toggle span:nth-child(2) { top: 8px; }
+.pp-menu-toggle span:nth-child(3) { top: 16px; }
+.pp-topnav.pp-menu-open .pp-menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.pp-topnav.pp-menu-open .pp-menu-toggle span:nth-child(2) { opacity: 0; }
+.pp-topnav.pp-menu-open .pp-menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* ----- hero: cream background, two columns ----- */
+.pp-hero {
+  background: var(--cream);
+  color: var(--pink);
+  padding: 5vw;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  grid-template-areas:
+    "back   device"
+    "cat    device"
+    "title  device"
+    "rule   device"
+    "info   device"
+    "cta    device";
+  column-gap: 4vw;
+  align-items: start;
+}
+.pp-back     { grid-area: back; }
+.pp-category { grid-area: cat; }
+.pp-title    { grid-area: title; }
+.pp-rule     { grid-area: rule; }
+.pp-info     { grid-area: info; }
+.pp-link-cta { grid-area: cta; }
+.pp-device   { grid-area: device; }
+
+.pp-back { display: inline-block; font: 600 14px var(--font-body); margin-bottom: 10px; transition: transform .2s; }
+.pp-back:hover { transform: translateX(-4px); }
+.pp-category { font: 600 14px var(--font-body); margin-bottom: 20px; }
+
+.pp-title {
+  font: 400 clamp(46px, 6.5vw, 80px) var(--font-title);
+  line-height: .95;
+  text-transform: none;
+  white-space: normal; /* overrides the homepage-only nowrap rule */
+}
+.pp-rule { width: 70%; max-width: 420px; height: 2px; background: var(--pink); margin: 20px 0 24px; }
+
+/* Role / Tools / Year / Client card */
+.pp-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 40px;
+  max-width: 480px;
+  padding: 1.6rem;
+  background: var(--pink);
+  color: var(--cream);
+}
+.pp-info span { display: block; font: 600 13px var(--font-body); opacity: .75; margin-bottom: 4px; }
+.pp-info b {
+  display: block;
+  font: 700 17px var(--font-body);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--cream);
+}
+
+/* "view prototype/site" link near the mockup */
+.pp-link-cta { display: inline-flex; align-items: center; gap: .4em; margin-top: 18px; font: 600 15px var(--font-body); }
+.pp-link-arrow { display: inline-block; transition: transform .2s; }
+.pp-link-cta:hover .pp-link-arrow { transform: translateX(4px); }
+
+/* ----- device mockup: ONE frame PNG with both a laptop and phone screen cutout ----- */
+.pp-device {
+  position: relative;
+  aspect-ratio: 16 / 10; /* match the frame image's width/height ratio */
+  align-self: center;
+}
+
+.pp-screen {
+  position: absolute;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;                     /* Firefox + current Chrome/Edge/Safari */
+  scrollbar-color: var(--cream) transparent; /* thumb color, track color */
+}
+.pp-screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* each cutout is in a different spot on the frame */
+.pp-screen-laptop { top: 6%;  left: 11%; width: 74%;   height: 78%; }
+.pp-screen-phone  { top: 26%; left: 78%; width: 21.5%; height: 71%; }
+
+.pp-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; /* clicks pass through to the scrollable screens underneath */
+}
+
+/* ----- scroll hint: a small bouncing dot near the bottom of each device
+   screen, added automatically by JS (see script.js) for every .pp-screen.
+   It reuses that screen's own .pp-screen-laptop / .pp-screen-phone class for
+   its position/size, so the two rects always match. It sits in front of the
+   screen but outside its scrolling box, and fades out for good the first
+   time that screen is scrolled. ----- */
+.pp-scroll-hint {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 1.5%;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity .4s ease;
+}
+.pp-scroll-hint-gone { opacity: 0; }
+.pp-scroll-hint span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .4);
+  color: #fff;
+  font: 400 12px/20px var(--font-body);
+  text-align: center;
+  animation: pp-scroll-hint-bounce 1.7s ease-in-out infinite;
+}
+@keyframes pp-scroll-hint-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ----- image carousel: an alternative to the laptop/phone device mockup,
+   for projects shown as a set of standalone images (e.g. Aurion).
+   Add .pp-carousel alongside .pp-device (don't replace it) to reuse the
+   exact same block sizing/grid placement. ----- */
+.pp-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pp-car-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+/* default = hidden slot: small, behind, invisible */
+.pp-car-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 46%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .22);
+  transform: translate(-50%, -50%) scale(.6);
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: transform .4s ease, opacity .4s ease;
+}
+.pp-car-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.pp-car-slide[data-slot="active"] {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  z-index: 3;
+  pointer-events: auto;
+}
+.pp-car-slide[data-slot="prev"],
+.pp-car-slide[data-slot="next"] { opacity: .55; z-index: 2; }
+.pp-car-slide[data-slot="prev"] { transform: translate(-82%, -50%) scale(.78); }
+.pp-car-slide[data-slot="next"] { transform: translate(-18%, -50%) scale(.78); }
+
+.pp-car-btn {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--pink);
+  background: var(--cream);
+  color: var(--pink);
+  font: 700 16px/1 var(--font-body);
+  cursor: pointer;
+  transition: background .2s, color .2s, transform .2s;
+}
+.pp-car-btn:hover { background: var(--pink); color: var(--cream); }
+.pp-car-prev { left: 10%; }
+.pp-car-next { right: 10%; }
+
+/* ----- "The project" — pink band, cream text ----- */
+.pp-project {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 4vw;
+  align-items: start;
+  padding: 5vw;
+  background: var(--pink);
+  color: var(--cream);
+}
+
+.pp-tabcard {
+  padding: 1.6rem;
+  background: var(--cream);
+  color: var(--pink);
+}
+.pp-tabcard-title {
+  font-family: var(--font-title);
+  font-size: clamp(18px, 2vw, 24px);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.pp-tabcard-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.2rem;
+}
+.pp-tabcard-tab {
+  padding: 6px 14px;
+  border: 2px solid var(--pink);
+  border-radius: 999px;
+  background: none;
+  color: var(--pink);
+  font: 600 13px var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+.pp-tabcard-tab[aria-selected="true"] {
+  background: var(--pink);
+  color: var(--cream);
+}
+.pp-tabcard-panel {
+  font-size: clamp(13px, 1.3vw, 15px);
+  line-height: 1.6;
+}
+
+/* section headings (pink band + cream band share the same type) */
+.pp-project h2, .pp-h2-dark {
+  font-family: var(--font-title);
+  font-size: clamp(32px, 4vw, 48px);
+}
+.pp-project h2 { margin-bottom: 1.2rem; }
+.pp-project p {
+  max-width: 70ch;
+  line-height: 1.6;
+  font-size: clamp(15px, 1.5vw, 18px);
+  margin-bottom: 1.2rem;
+}
+
+/* ----- "Brand identity" — cream band ----- */
+.pp-section { padding: 5vw; background: var(--cream); }
+.pp-h2-dark { color: var(--pink); margin-bottom: 1.6rem; }
+
+.pp-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.pp-row > div { flex: 1; min-width: 150px; }
+.pp-logos { display: grid; grid-template-columns: repeat(4, 1fr); }
+
+/* ----- reusable per-project utility classes: write once, never edit again ----- */
+.pp-accent    { background: var(--c-accent); }
+.pp-accent2   { background: var(--c-accent2); }
+.pp-highlight { background: var(--c-highlight); }
+.pp-dark      { background: var(--c-dark); }
+.pp-light     { background: var(--c-light); }
+.pp-base      { background: var(--c-base); }
+.pp-ink       { background: #000; }
+
+.pp-text-accent    { color: var(--c-accent); }
+.pp-text-accent2   { color: var(--c-accent2); }
+.pp-text-highlight { color: var(--c-highlight); }
+.pp-text-dark      { color: var(--c-dark); }
+.pp-text-light     { color: var(--c-light); }
+.pp-text-base      { color: var(--c-base); }
+
+.pp-mainfont  { font-family: var(--mainfont); }
+.pp-titlefont { font-family: var(--titlefont); }
+
+/* tiles share the same rounded corners */
+.logo-tile, .font-tile, .swatch { border-radius: 12px; }
+
+/* logo tiles */
+.logo-tile {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16%;
+}
+.logo-tile.pp-tile-img {
+  background-size: cover;
+  background-position: center;
+}
+.logo-mark {
+  display: block;
+  width: 100%;
+  height: 100%;
+  mask: var(--logo) center / contain no-repeat;
+  -webkit-mask: var(--logo) center / contain no-repeat;
+}
+/* opt-in: a plain <img> logo instead of a tinted mask */
+.logo-tile.pp-logo-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* typography pair */
+.pp-fonts { display: grid; grid-template-columns: repeat(2, 1fr); }
+.font-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+}
+.font-tile .font-sample { font-size: clamp(40px, 5vw, 55px); line-height: 1; word-break: break-all; }
+.font-tile b { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.font-tile p { font-size: 13px; opacity: .85; max-width: 30ch; }
+
+/* color swatches */
+.swatch {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px;
+  color: var(--pink);
+}
+.swatch b { font-size: 14px; font-weight: 700; }
+.swatch span { font-size: 12px; }
+.swatch-dark { color: var(--c-base); }
+.swatch-light { border: 2px solid var(--c-dark); color: var(--c-dark); }
+.swatch.pp-swatch-gradient {
+  background-image: linear-gradient(135deg, var(--c-accent), var(--c-highlight), var(--c-accent2));
+}
+
+/* ----- disclaimer + prev/next project nav ----- */
+.pp-ai-note { margin-top: 2rem; font-size: 12px; opacity: .7; color: var(--pink); }
+
+.pp-adjacent {
+  display: flex;
+  justify-content: space-between;
+  background: var(--cream);
+  padding: 2.4rem 5vw;
+}
+.pp-adjacent-link { display: flex; flex-direction: column; gap: 6px; }
+.pp-adjacent-link.next { margin-left: auto; align-items: flex-end; text-align: right; } /* stays right even with no Previous link */
+.pp-adjacent-label { font: 600 12px var(--font-body); color: var(--pink); opacity: .7; text-transform: uppercase; letter-spacing: .06em; }
+.pp-adjacent-name {
+  display: inline-block;
+  font-family: var(--font-title);
+  font-size: clamp(18px, 2.2vw, 26px);
+  color: var(--pink);
+  transition: transform .2s;
+}
+.pp-adjacent-link.prev .pp-adjacent-name:hover { transform: translateX(-6px); }
+.pp-adjacent-link.next .pp-adjacent-name:hover { transform: translateX(6px); }
+
+/* ---------- 11. PROJECT COLOR DATA ---------- */
+/* One block per project. This is the ONLY thing a new project page needs
+   to define in CSS — everything above reads from these variables. */
+
+.pp-sweethome {
+  --c-accent:    #DE6E79; /* Bubblegum Pink */
+  --c-accent2:   #F2BBBD; /* Cotton Rose */
+  --c-highlight: #FFE782; /* Vanilla Custard */
+  --c-light:     #FFF5D4; /* Cornsilk */
+  --c-dark:      #8E2933; /* Burnt Rose */
+  --c-base:      #FFFFFF; /* White */
+  --logo:        url('img/SweetHomeLogo.svg');
+  --mainfont:  'Lexend', sans-serif;
+  --titlefont: 'Lalezar', cursive;
+}
+
+.pp-resonance {
+  --c-accent:    #44E6E6;
+  --c-accent2:   #DD1EA6;
+  --c-highlight: #A206F6;
+  --c-light:     #3642EA;
+  --c-dark:      #181828;
+  --c-base:      #FFFFFF;
+  --logo:        url('img/ResonanceLogo.png');
+  --mainfont:  'Stretch Pro', sans-serif;
+  --titlefont: 'Punk Kid', cursive;
+}
+
+.pp-saveurs {
+  --c-accent:    #CBB155;
+  --c-accent2:   #142315;
+  --c-highlight: #4C5A3E;
+  --c-light:     #F8F4EB;
+  --c-dark:      #181828;
+  --c-base:      #FFFFFF;
+  --logo:        url('img/SaveursLogo.png');
+  --mainfont:  'Stretch Pro', sans-serif;
+  --titlefont: 'Punk Kid', cursive;
+}
+
+.pp-coaching {
+  --c-accent:    #467FF7;
+  --c-accent2:   #0D3276;
+  --c-highlight: #E7F4FF;
+  --c-light:     #FFFFFF;
+  --c-dark:      #1C244B;
+  --c-base:      #FFFFFF;
+  --logo:        url('img/OlivierIcon.png');
+  --mainfont:  'Manrope', sans-serif;
+  --titlefont: 'Manrope', sans-serif;
+}
+
+.pp-mochein {
+  --c-accent:    #D8FF00;
+  --c-accent2:   #0D3276;
+  --c-highlight: #000000;
+  --c-light:     #F4F1EA;
+  --c-dark:      #1C1C1C;
+  --c-base:      #FFFFFF;
+  --logo:        url('img/MIF-LOGO.webp');
+  --mainfont:  'Space Mono', sans-serif;
+  --titlefont: 'Anton', sans-serif;
+}
+
+/* ---------- 12. RESPONSIVE: every mobile override lives here, nowhere else ---------- */
+@media (max-width: 700px) {
+  /* -- hero -- */
+  .hero-dots { display: none; }
+  .hero-lead {
+    width: 88vw;
+    right: 6%;
+    bottom: 5%;
+  }
+  .nav-links {
+    gap: 16px;
+    padding-right: 0;
+  }
+  h1 {
+    white-space: normal; /* lets "WEB DESIGN" wrap */
+    font-size: 19vw;     /* big enough that it has to wrap */
+    text-align: center;
+  }
+  .hero-title { max-width: 90vw; }
+  .hero-arrow {
+    top: auto;
+    bottom: 0;
+  }
+
+  /* -- about -- */
+  /* The desktop layout overlaps the illustration + button on top of the
+     pink section using absolute positioning based on --illus-w / --illus-left.
+     That math doesn't hold up on narrow screens, so on mobile we drop back
+     to a simple stacked layout instead. */
+  .about-top {
+    grid-template-columns: 1fr;
+    padding-bottom: 63vw;
+  }
+  /* reorder the same elements (no HTML change): intro, button, toolkit */
+  .about-intro   { order: 1; }
+  .view-btn      { order: 2; }
+  .about-toolkit { order: 3; }
+
+  /* same overlap trick as desktop, just centered, so the card straddles
+     the cream/pink boundary */
+  .about-illustration {
+    left: 50%;
+    width: 80vw;
+    transform: translate(-50%, 45%);
+  }
+  .about-bottom {
+    padding-left: 5vw;
+    padding-top: 48vw; /* clears the part of the illustration hanging into the pink */
+  }
+  .view-btn {
+    position: static;
+    display: flex;
+    width: fit-content;
+    margin: 1.5rem 6cqw 1.5rem;
+  }
+
+  .about-toolkit ul {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 5px;
+  }
+  .about-toolkit li { padding: .5rem .7rem; }
+  .about-icon { flex-shrink: 0; }
+  .about-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* -- about me: same elements, repositioned for the mobile background art -- */
+  .about-me {
+    width: 100%;
+    aspect-ratio: 394 / 412;
+    margin: 2rem 0 0;
+  }
+  .about-me-bg {
+    background-image: url('img/blobMobile.svg');
+    background-size: 100% 100%;
+  }
+  .about-me-title {
+    top: 0%;
+    right: 3%;
+    font-size: 7.5cqw;
+    letter-spacing: .14em;
+  }
+  .about-tag {
+    width: 45cqw;
+    padding: .35em 1.1em;
+    background: var(--cream);
+    white-space: nowrap;
+    font-size: 4.7cqw;
+  }
+  .lang-tag {
+    left: 4%;
+    top: 68%;
+    background: none;
+  }
+  .hobby-tag {
+    left: auto;
+    right: 5%;
+    top: 12%;
+    color: var(--pink);
+  }
+  .hobby-grid {
+    left: 8%;
+    top: 23%;
+    width: 78%;
+    gap: 2.5cqw;
+  }
+  .hobby-grid h3 { font-size: 2.7cqw; }
+  .hobby-card { font-size: 3cqw; }
+  /* desktop stacks these vertically; mobile regrids the same <li>s into 2x2,
+     kept narrow because the background art is only cream on the left ~58% */
+  .lang-list {
+    left: 3%;
+    top: 78%;
+    width: 55%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3cqw 2.5cqw;
+  }
+  .lang-list li { margin-bottom: 0; }
+  .lang-pill { box-shadow: none; }
+
+  /* -- projects (home) -- */
+  .projects { padding: 40px 3vw 30px; }
+  .proj-tabs { padding-left: 0; }
+  .proj-tab { font-size: 12px; margin-right: -8px; }
+  .proj-tab span { padding: 10px 14px 9px; }
+
+  .proj-row { grid-template-columns: 28px 1fr 32px; gap: 12px; }
+  .proj-title { font-size: clamp(18px, 6.5vw, 70px); }
+  .proj-more {
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+    transition: transform .25s;
+  }
+  .proj-type { display: none; }
+
+  /* Tapping the title focuses it (→ :focus-within), which would trigger the
+     desktop hover look. Neutralize it — on mobile only .is-open matters. */
+  .proj-row:hover,
+  .proj-row:focus-within {
+    background: none;
+    color: inherit;
+    padding-left: 12px;
+  }
+  .proj-row:hover .pv,
+  .proj-row:focus-within .pv {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* the hover popup becomes an inline block that opens under the row
+     (it's the 4th grid item, so it spans under the other 3) */
+  .pv {
+    position: static;
+    grid-column: 1 / -1;
+    width: 100%;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    max-height: 0;
+    transition: max-height .35s ease, margin-top .35s ease;
+  }
+  .pv i { background: var(--cream); color: var(--pink); }
+  .pv div { border: 2px solid var(--cream); }
+  .proj-row.is-open .pv {
+    max-height: 400px;
+    margin-top: 12px;
+  }
+
+  /* -- contact -- */
+  .contact { grid-template-columns: 1fr; }
+
+  /* -- project page template -- */
+  .pp-screen-phone { width: 21%; }
+  .pp-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "back"
+      "cat"
+      "title"
+      "rule"
+      "device"
+      "info"
+      "cta";
+  }
+  .pp-device { margin-bottom: 24px; }
+  .pp-info { margin-bottom: 20px; }
+  .pp-project, .pp-fonts { grid-template-columns: 1fr; }
+  .pp-row > div { min-width: 30%; } /* ~3 per row; wraps on its own for fewer colors */
+  .pp-logos { grid-template-columns: repeat(2, 1fr); }
+
+  /* -- project page mobile nav: hamburger + dropdown -- */
+  .pp-menu-toggle { display: block; margin-left: auto; }
+  .pp-topnav .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 100vw;
+    margin: 0 0 0 -50vw;
+    flex-direction: column;
+    gap: 0;
+    background: var(--pink);
+    border-top: 1px solid var(--cream);
+    z-index: 20;
+  }
+  .pp-topnav.pp-menu-open .nav-links { display: flex; }
+  .pp-topnav .nav-links li { border-bottom: 1px solid var(--cream); }
+  .pp-topnav .nav-links a { display: block; padding: 12px 9px; }
+}
