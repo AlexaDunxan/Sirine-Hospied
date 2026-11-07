@@ -532,7 +532,7 @@ h1 {
   text-transform: uppercase;
 }
 
-/* hamburger toggle: hidden on desktop, shown + wired up on mobile (see section 12) */
+/* hamburger toggle (project pages + homepage): hidden on desktop, shown + wired up on mobile (see section 12) */
 .pp-menu-toggle {
   display: none;
   position: relative;
@@ -553,9 +553,9 @@ h1 {
 .pp-menu-toggle span:nth-child(1) { top: 0; }
 .pp-menu-toggle span:nth-child(2) { top: 8px; }
 .pp-menu-toggle span:nth-child(3) { top: 16px; }
-.pp-topnav.pp-menu-open .pp-menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-.pp-topnav.pp-menu-open .pp-menu-toggle span:nth-child(2) { opacity: 0; }
-.pp-topnav.pp-menu-open .pp-menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.pp-menu-open .pp-menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.pp-menu-open .pp-menu-toggle span:nth-child(2) { opacity: 0; }
+.pp-menu-open .pp-menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
 /* ----- hero: cream background, two columns ----- */
 .pp-hero {
@@ -1179,9 +1179,11 @@ h1 {
   .pp-row > div { min-width: 30%; } /* ~3 per row; wraps on its own for fewer colors */
   .pp-logos { grid-template-columns: repeat(2, 1fr); }
 
-  /* -- project page mobile nav: hamburger + dropdown -- */
+  /* -- mobile nav (project pages + homepage): hamburger + dropdown -- */
   .pp-menu-toggle { display: block; margin-left: auto; }
-  .pp-topnav .nav-links {
+  .navbar { position: relative; } /* anchors the homepage dropdown */
+  .pp-topnav .nav-links,
+  .navbar .nav-links {
     display: none;
     position: absolute;
     top: 100%;
@@ -1191,10 +1193,13 @@ h1 {
     flex-direction: column;
     gap: 0;
     background: var(--pink);
+    color: var(--cream);
     border-top: 1px solid var(--cream);
     z-index: 20;
   }
-  .pp-topnav.pp-menu-open .nav-links { display: flex; }
-  .pp-topnav .nav-links li { border-bottom: 1px solid var(--cream); }
-  .pp-topnav .nav-links a { display: block; padding: 12px 9px; }
+  .pp-menu-open .nav-links { display: flex; }
+  .pp-topnav .nav-links li,
+  .navbar .nav-links li { border-bottom: 1px solid var(--cream); }
+  .pp-topnav .nav-links a,
+  .navbar .nav-links a { display: block; padding: 12px 9px; }
 }

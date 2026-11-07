@@ -6,6 +6,9 @@
     <title>Sirine Hospied — Web Design Portfolio</title>
     <meta name="description" content="Portfolio of Sirine Hospied, web design student in Belgium: websites, brand identities and graphic design. Looking for an internship from February 2027." />
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,24 +16,26 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Archivo+Black&family=Fredoka:wght@500;600&display=swap"
     />
-    <!-- Font Awesome -->
+    <!-- Font Awesome: only the core + solid style (the arrow icon) instead of every icon set -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/solid.min.css" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-
-    <!-- CSS -->
+    <!-- Link to our CSS file -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- HERO (navbar included) -->
+    <!-- HERO: the whole top section (navbar included) -->
     <header class="hero" id="hero">
+      <!-- A "stage" is one complete copy of the hero.
+         The JS will make a second, colour-inverted copy of it for the light effect. -->
       <div class="hero-stage">
-        <!-- LAYER 1: cream background, pink text. -->
+        <!-- LAYER 1: cream background, pink text. Write your content ONCE, here. -->
         <div class="hero-layer hero-base">
           <nav class="navbar">
             <a class="logo" href="#hero">SH</a>
+            <button class="pp-menu-toggle" aria-label="Menu" aria-expanded="false">
+              <span></span><span></span><span></span>
+            </button>
             <ul class="nav-links">
               <li><a href="#hero">Home</a></li>
               <li><a href="#projects">Projects</a></li>
@@ -42,7 +47,7 @@
             <p class="hero-name">Sirine Hospied</p>
             <h1>
               Web Design
-              <!-- little cursor arrow  -->
+              <!-- little cursor arrow drawn with SVG (a shape made from code) -->
               <svg class="hero-arrow" viewBox="0 0 40 44" aria-hidden="true">
                 <path d="M4 3l30 16-13 3 8 16-6 3-8-16-9 9z" />
               </svg>
@@ -58,7 +63,8 @@
           </p>
         </div>
 
-        <!-- LAYER 2: the pink diagonal. -->
+        <!-- LAYER 2: the pink diagonal. Left EMPTY on purpose:
+           the JS copies Layer 1's content in here, so you never write it twice. -->
         <div class="hero-layer hero-diagonal"></div>
       </div>
     </header>
@@ -93,13 +99,13 @@
           </ul>
         </aside>
 
-        <!-- illustration -->
+        <!-- These two belong to the top half, but hang over into the pink -->
         <div class="about-illustration">
         <img src="img/illustration.webp" alt="…"></div>
         <a class="btn view-btn" href="#projects">View my projects →</a>
       </div>
 
-      <!-- bottom half -->
+      <!-- BOTTOM HALF (pink) -->
       <div class="about-bottom">
         <div class="about-search">
           <svg viewBox="0 0 24 24" aria-hidden="true">

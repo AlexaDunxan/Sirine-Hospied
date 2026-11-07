@@ -115,15 +115,26 @@ if (emailLink) {
 const footerEmail = document.getElementById("footer-email");
 if (footerEmail) footerEmail.href = mailto;
 
-// ---------- 6. Project-page mobile nav (hamburger toggle) ----------
-const menuToggle = document.querySelector(".pp-menu-toggle");
-const topnav = document.querySelector(".pp-topnav");
-if (menuToggle && topnav) {
-  menuToggle.addEventListener("click", () => {
-    const isOpen = topnav.classList.toggle("pp-menu-open");
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-  });
-}
+// ---------- 6. Mobile nav: hamburger toggle (project pages + homepage) ----------
+// On the homepage the navbar exists in every hero copy (section 1), so the
+// class goes on the whole hero and all copies open/close together.
+document.querySelectorAll(".pp-topnav, .hero").forEach((nav) => {
+  const toggles = nav.querySelectorAll(".pp-menu-toggle");
+  if (!toggles.length) return;
+
+  function setOpen(open) {
+    nav.classList.toggle("pp-menu-open", open);
+    toggles.forEach((t) => t.setAttribute("aria-expanded", String(open)));
+  }
+
+  toggles.forEach((t) =>
+    t.addEventListener("click", () => setOpen(!nav.classList.contains("pp-menu-open")))
+  );
+  // close the menu after tapping a link (homepage links jump within the page)
+  nav.querySelectorAll(".nav-links a").forEach((link) =>
+    link.addEventListener("click", () => setOpen(false))
+  );
+});
 
 // ---------- 7. "Design choices" tab card on project pages ----------
 setupTabs(
